@@ -40,33 +40,34 @@ class SawinDancer {
     // add properties for your dancer here:
     this.xOffset = 0;
     this.yOffset = 0;
-    this.cowOffset = 0;
     //..
     //..
     //..
     this.legX = -20;
-    this.armMoving = false;
+    // this.armMoving = false;
     this.legAlpha1 = 55;
     this.legAlpha2 = 255;
     this.legScale1 = 1;
     this.legScale2 = 1;
-    this.cowScale = 1;
-    this.alphaCow = 255;
     this.timeOfLastKeyPress
-    this.cowY = 32;
+    this.animal = "🐄";
+    this.animalList = ["🐄", "🐖", "🐁", "🐑", "🐓", "🐐", "🦔"];
+    this.transmitting = false;
+    this.animalY = 200;
+    this.animalAlpha = 255;
+    this.animalSize = 60;
   }
   update() {
     // update properties here to achieve
     // your dancer's desired moves and behaviour
-    this.xOffset = sin(frameCount*.02)*30;
-    this.yOffset = sin(frameCount*.06)*40;
+    this.xOffset = sin(frameCount*.04)*30;
+    this.yOffset = sin(frameCount*.08)*40;
     this.legX1 = map(sin(frameCount*0.1), -1, 1, -20, 20);
     this.legX2 = map(sin(frameCount*0.1+PI), -1, 1, -20, 20);
     this.legAlpha1 = map(cos(frameCount*0.1), -1, 1, 55, 255);
     this.legAlpha2 = map(cos(frameCount*0.1+PI), -1, 1, 55, 255);
     this.legScale1 = map(cos(frameCount*0.1), -1, 1, 0.8, 1.1);
     this.legScale2 = map(cos(frameCount*0.1+PI), -1, 1, 0.8, 1.1);
-    this.cowOffset = sin(frameCount*.02)*30;
 
     // //arm
     // push();
@@ -75,14 +76,28 @@ class SawinDancer {
     // fill("red");
     // circle()
     // pop();
+
+
+    //animal transmitting
+    if(this.transmitting){
+      if(this.animalY > 37){
+        this.animalY -= 3;
+        constrain(this.animalSize, 20, 60);
+        constrain(this.animalAlpha, 0, 255);
+        this.animalSize -= 0.8;
+        this.animalAlpha -= -50;
+      }
+    }
+
+
   }
   display() {
     // the push and pop, along with the translate 
     // places your whole dancer object at this.x and this.y.
     // you may change its position on line 19 to see the effect.
+
     push();
     translate(this.x+this.xOffset, this.y+this.yOffset);
-
 
     // ******** //
     // ⬇️ draw your dancer from here ⬇️
@@ -103,10 +118,20 @@ class SawinDancer {
     // //alien mouth
     // fill("red");
     // ellipse(0, -3, 10, 5);
-    //alien arm
-    fill(114, 255, 63);
-    rect(-45, 5, 30, 5);
-    rect(15, 5, 30, 5);
+    // //alien arm
+    // fill(114, 255, 63);
+    // rect(-45, 5, 30, 5);
+    // rect(15, 5, 30, 5);
+
+    //Animals
+    push();
+    translate(0, 0);
+    textSize(this.animalSize);
+    fill(255, this.animalAlpha);
+    text(this.animal, -this.animalSize/2, this.animalY);
+    pop();
+
+
 
     //alien leg1
     push();
@@ -121,19 +146,21 @@ class SawinDancer {
     push();
     translate(this.legX2, 25)
      scale(this.legScale2);
-    fill(253, 255, 63, this.legAlpha1);
+    fill(253, 255, 63, this.legAlpha2);
    
     rect(-5, 0, 10, 30);
     pop();
     
-        // //cow
+
+    // //cow
     // push();
     // scale(cowScale);
     // fill(alphaCow);
-    text("🐄",-5, this.cowY);
+    // text("🐄",-5, this.cowY);
     // pop();
 
-
+    // fill(255);
+    // text(mouseX + "," + mouseY, mouseX, mouseY);
 
 
 
@@ -157,7 +184,7 @@ class SawinDancer {
     // this function will be called when the "a" key is pressed.
     // your dancer should perform some kind of reaction (i.e. make a special move or gesture) 
     // function draw(){a
-    this.cowY = 32+ this.cowOffset
+    this.transmitting = true;
 
 
     
@@ -165,8 +192,11 @@ class SawinDancer {
   triggerD(){
     // this function will be called when the "d" key is pressed.
     // your dancer should perform some kind of reaction (i.e. make a special move or gesture) 
-
-
+    this.animal = random(this.animalList);
+    this.animalY = 200;
+    this.animalAlpha = 255;
+    this.animalSize = 60;
+    this.transmitting = false;
 
   }
   drawReferenceShapes() {
@@ -180,6 +210,7 @@ class SawinDancer {
     stroke(0);
   }
 }
+
 
 
 
