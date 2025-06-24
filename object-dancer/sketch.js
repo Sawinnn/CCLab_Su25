@@ -81,8 +81,8 @@ class SawinDancer {
     this.yOffset = sin(frameCount*.08)*40;
     this.legX1 = map(sin(frameCount*0.1), -1, 1, -20, 20);
     this.legX2 = map(sin(frameCount*0.1+PI), -1, 1, -20, 20);
-    this.legAlpha1 = map(cos(frameCount*0.1), -1, 1, 55, 255);
-    this.legAlpha2 = map(cos(frameCount*0.1+PI), -1, 1, 55, 255);
+    this.legAlpha1 = map(cos(frameCount*0.1), -1, 1, 20, 100);
+    this.legAlpha2 = map(cos(frameCount*0.1+PI), -1, 1, 20, 100);
     this.legScale1 = map(cos(frameCount*0.1), -1, 1, 0.8, 1.1);
     this.legScale2 = map(cos(frameCount*0.1+PI), -1, 1, 0.8, 1.1);
 
@@ -128,13 +128,13 @@ class SawinDancer {
     // ⬇️ draw your dancer from here ⬇️
     noStroke();
     //ufo body
-    fill(180);
+    fill(0, 0, 60);
     arc(0, 30, 60, 60, radians(-180), radians(0), CHORD);
     //ufo hole
-    fill(80);
+    fill(0, 0, 30);
     ellipse(0, 30, 60, 15);
     //alien head
-    fill(114, 255, 63);
+    fill(86, 100, 95);
     ellipse(0, -20, 80+this.xOffset*0.2, 70+this.yOffset*0.2);
     //alien eyes
     fill(0);
@@ -162,7 +162,7 @@ class SawinDancer {
     push();
       translate(this.legX1, 25)
      scale(this.legScale1);
-    fill(253, 255, 63, this.legAlpha1);
+    fill(60, 100, this.legAlpha1);
    
     rect(-5, 0, 10, 30);
     pop();
@@ -171,7 +171,7 @@ class SawinDancer {
     push();
     translate(this.legX2, 25)
      scale(this.legScale2);
-    fill(253, 255, 63, this.legAlpha2);
+    fill(60, 100, this.legAlpha2);
    
     rect(-5, 0, 10, 30);
     pop();
