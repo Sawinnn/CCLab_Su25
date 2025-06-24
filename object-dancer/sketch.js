@@ -176,9 +176,9 @@ class SawinDancer {
     // it is using "this" because this function, too, 
     // is a part if your Dancer object.
     // comment it out or delete it eventually.
-    this.drawReferenceShapes()
+    // this.drawReferenceShapes()
 
-    pop();
+    // pop();
   }
   triggerA(){
     // this function will be called when the "a" key is pressed.
