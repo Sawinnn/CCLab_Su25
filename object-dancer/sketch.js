@@ -10,7 +10,13 @@
   5. have fun.
 */
 
+
 let dancer;
+
+let NUM_OF_PARTICLES = 50; // Decide the initial number of particles.
+let particles = [];
+
+
 
 function setup() {
   // no adjustments in the setup function needed...
@@ -19,7 +25,8 @@ function setup() {
 
   // ...except to adjust the dancer's name on the next line:
   dancer = new SawinDancer(width / 2, height / 2);
- 
+  colorMode(HSB);
+
 }
 
 function draw() {
@@ -27,8 +34,18 @@ function draw() {
   background(0);
   drawFloor(); // for reference only
 
+  // update and display
+  for (let i = 0; i < particles.length; i++) {
+    let p = particles[i];
+    p.update();
+    p.display();
+  }
+
+
   dancer.update();
   dancer.display();
+
+
 }
 
 // You only code inside this class.
@@ -89,8 +106,16 @@ class SawinDancer {
       }
     }
 
+  // update and display
+  for (let i = 0; i < particles.length; i++) {
+    let p = particles[i];
+    p.update();
+    p.display();
+  }
+
 
   }
+
   display() {
     // the push and pop, along with the translate 
     // places your whole dancer object at this.x and this.y.
@@ -163,10 +188,6 @@ class SawinDancer {
     // text(mouseX + "," + mouseY, mouseX, mouseY);
 
 
-
-
-
-
     // ⬆️ draw your dancer above ⬆️
     // ******** //
 
@@ -180,25 +201,19 @@ class SawinDancer {
 
     // pop();
   }
+  
   triggerA(){
-    // this function will be called when the "a" key is pressed.
-    // your dancer should perform some kind of reaction (i.e. make a special move or gesture) 
-    // function draw(){a
-    this.transmitting = true;
-
-
-    
+    this.transmitting = true;   
   }
+
   triggerD(){
-    // this function will be called when the "d" key is pressed.
-    // your dancer should perform some kind of reaction (i.e. make a special move or gesture) 
     this.animal = random(this.animalList);
     this.animalY = 200;
     this.animalAlpha = 255;
     this.animalSize = 60;
     this.transmitting = false;
-
   }
+
   drawReferenceShapes() {
     noFill();
     stroke(255, 0, 0);
@@ -209,6 +224,7 @@ class SawinDancer {
     fill(255);
     stroke(0);
   }
+
 }
 
 
@@ -238,5 +254,70 @@ function keyPressed(){
     dancer.triggerA()
   }else if(key == "d"){
     dancer.triggerD()
+  }else if(key == "p"){
+    // generate particles
+  let x = random(width*0.3, width*0.7)
+  let y = random(height*0.3, height*0.7)
+  for (let i = 0; i < NUM_OF_PARTICLES; i++) {
+    particles[i] = new Particle(x, y);
   }
+  }
+}
+
+
+class Particle {
+  // constructor function
+  constructor(startX, startY) {
+    // properties (variables): particle's characteristics
+    this.x = startX;
+    this.y = startY;
+    this.dia = 40;
+    this.speedX = random(-2, 2);
+    this.speedY = random(-1, -3);  
+    this.planetFill = 360;//random(360);
+    this.planetB = 0;
+    this.visible = true;
+  }
+  // methods (functions): particle's behaviors
+  update() {
+    // (add) 
+    if (this.planetFill > 5){
+      this.planetFill-=random(5);
+      // this.planetB += 1;
+    }else if (this.planetFill < 5){
+      this.x+=this.speedX;
+      this.speedX *= 0.99;
+
+      this.y+=this.speedY;
+      this.speedY *= 0.99 ;
+
+      this.dia *= 0.99;
+
+      // this.planetB -=1;
+    }
+
+  if (this.dia <0.0001){
+    this.visible = false;
+  }
+
+  if (this.visible == false){
+    particles.splice(i, 1);
+  }
+
+
+
+  }
+  display() {
+    // particle's appearance
+    push();
+    translate(this.x, this.y);
+    
+    fill(this.planetFill, 100, 100);
+    circle(0, 0, this.dia);
+
+    pop();
+  }
+
+ 
+
 }
