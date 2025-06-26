@@ -17,6 +17,12 @@ let NUM_OF_PARTICLES = 50; // Decide the initial number of particles.
 let particles = [];
 
 
+function preload(){
+  ufo = loadSound("assets/ufo.mp3");
+  quack = loadSound("assets/quack.mp3");
+  explosion = loadSound("assets/explosion.mp3")
+}
+
 
 function setup() {
   // no adjustments in the setup function needed...
@@ -39,11 +45,19 @@ function draw() {
     let p = particles[i];
     p.update();
     p.display();
+    if (this.visible == false){
+     particles.splice(i, 1);
+    }
+
+
+    
   }
 
 
   dancer.update();
   dancer.display();
+
+
 
 
 }
@@ -68,24 +82,28 @@ class SawinDancer {
     this.legScale2 = 1;
     this.timeOfLastKeyPress
     this.animal = "🐄";
-    this.animalList = ["🐄", "🐖", "🐁", "🐑", "🐓", "🐐", "🦔"];
+    this.animalList = ["🐄", "🐖", "🐁", "🐑", "🐓", "🐐", "🦔","🦆","🐥","🦖","🦕","🦙","🦬","🐇","🐿"];
     this.transmitting = false;
     this.animalY = 200;
     this.animalAlpha = 255;
     this.animalSize = 60;
+    this.animalX = width+50;
+    this.animalXGoal = 0;
   }
   update() {
     // update properties here to achieve
     // your dancer's desired moves and behaviour
-    this.xOffset = sin(frameCount*.04)*30;
-    this.yOffset = sin(frameCount*.08)*40;
-    this.legX1 = map(sin(frameCount*0.1), -1, 1, -20, 20);
-    this.legX2 = map(sin(frameCount*0.1+PI), -1, 1, -20, 20);
-    this.legAlpha1 = map(cos(frameCount*0.1), -1, 1, 20, 100);
-    this.legAlpha2 = map(cos(frameCount*0.1+PI), -1, 1, 20, 100);
-    this.legScale1 = map(cos(frameCount*0.1), -1, 1, 0.8, 1.1);
-    this.legScale2 = map(cos(frameCount*0.1+PI), -1, 1, 0.8, 1.1);
+    this.xOffset = sin(frameCount*.05)*30;
+    this.yOffset = sin(frameCount*.1)*40;
+    this.legX1 = map(sin(frameCount*0.12), -1, 1, -20, 20);
+    this.legX2 = map(sin(frameCount*0.12+PI), -1, 1, -20, 20);
+    this.legAlpha1 = map(cos(frameCount*0.12), -1, 1, 20, 100);
+    this.legAlpha2 = map(cos(frameCount*0.12+PI), -1, 1, 20, 100);
+    this.legScale1 = map(cos(frameCount*0.12), -1, 1, 0.8, 1.1);
+    this.legScale2 = map(cos(frameCount*0.12+PI), -1, 1, 0.8, 1.1);
 
+
+    this.animalX = lerp(this.animalX, this.animalXGoal, 0.3)
     // //arm
     // push();
     // translate();
@@ -97,21 +115,24 @@ class SawinDancer {
 
     //animal transmitting
     if(this.transmitting){
-      if(this.animalY > 37){
-        this.animalY -= 3;
+      if(this.animalY > 40){
+        this.animalY -= 5;
         constrain(this.animalSize, 20, 60);
         constrain(this.animalAlpha, 0, 255);
-        this.animalSize -= 0.8;
+        this.animalSize -= 1.2;
         this.animalAlpha -= -50;
+      // }else if(this.animalY < 37){
+      //   this.animalY += 3;
+      //   this.animalSize += 0.8;
       }
     }
 
-  // update and display
-  for (let i = 0; i < particles.length; i++) {
-    let p = particles[i];
-    p.update();
-    p.display();
-  }
+  // // update and display
+  // for (let i = 0; i < particles.length; i++) {
+  //   let p = particles[i];
+  //   p.update();
+  //   p.display();
+  // }
 
 
   }
@@ -148,15 +169,6 @@ class SawinDancer {
     // rect(-45, 5, 30, 5);
     // rect(15, 5, 30, 5);
 
-    //Animals
-    push();
-    translate(0, 0);
-    textSize(this.animalSize);
-    fill(255, this.animalAlpha);
-    text(this.animal, -this.animalSize/2, this.animalY);
-    pop();
-
-
 
     //alien leg1
     push();
@@ -167,6 +179,16 @@ class SawinDancer {
     rect(-5, 0, 10, 30);
     pop();
     
+    //Animals
+    push();
+    translate(0, 0);
+    textSize(this.animalSize);
+    fill(255, this.animalAlpha);
+    textAlign(CENTER)
+    text(this.animal, this.animalX, this.animalY);
+    pop();
+
+
     // alien leg2
     push();
     translate(this.legX2, 25)
@@ -204,14 +226,21 @@ class SawinDancer {
   
   triggerA(){
     this.transmitting = true;   
+    ufo.play();
   }
 
   triggerD(){
     this.animal = random(this.animalList);
     this.animalY = 200;
+    this.animalX = width+50;
+    // if (animalX >-30){
+    //   this.animalX -= 5;
+    // }
     this.animalAlpha = 255;
     this.animalSize = 60;
+    quack.play();
     this.transmitting = false;
+
   }
 
   drawReferenceShapes() {
@@ -261,6 +290,7 @@ function keyPressed(){
   for (let i = 0; i < NUM_OF_PARTICLES; i++) {
     particles[i] = new Particle(x, y);
   }
+  explosion.play();
   }
 }
 
@@ -273,7 +303,7 @@ class Particle {
     this.y = startY;
     this.dia = 40;
     this.speedX = random(-2, 2);
-    this.speedY = random(-1, -3);  
+    this.speedY = random(-1, -2);  
     this.planetFill = 360;//random(360);
     this.planetB = 0;
     this.visible = true;
@@ -281,7 +311,7 @@ class Particle {
   // methods (functions): particle's behaviors
   update() {
     // (add) 
-    if (this.planetFill > 5){
+    if (this.planetFill > 5){p
       this.planetFill-=random(5);
       // this.planetB += 1;
     }else if (this.planetFill < 5){
@@ -300,9 +330,9 @@ class Particle {
     this.visible = false;
   }
 
-  if (this.visible == false){
-    particles.splice(i, 1);
-  }
+  // if (this.visible == false){
+  //   particles.splice(i, 1);
+  // }
 
 
 
