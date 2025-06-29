@@ -1,0 +1,16 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+.main-wrapper {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 50px 0;
+  /* backgroun  d-color: aquamarine; */
+}
